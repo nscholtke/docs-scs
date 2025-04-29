@@ -8,7 +8,7 @@ const config = {
   title: 'One platform — standardized, built and operated by many.',
   tagline: 'Documentation and Community Platform for the Sovereign Cloud Stack',
   url: 'https://docs.scs.community',
-  baseUrl: '/',
+  baseUrl: process.env.BASEURL || '/',
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.png',

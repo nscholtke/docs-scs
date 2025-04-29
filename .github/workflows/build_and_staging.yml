@@ -29,6 +29,8 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install dependencies and build page
+        env:
+          BASEURL: "/docs-scs"
         run: |
           npm ci
           npm run build
