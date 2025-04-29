@@ -2,7 +2,7 @@
 // Note: type annotations allow type checking and IDEs autocompletion
 
 import { themes as prismThemes } from 'prism-react-renderer'
-
+// test
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'One platform — standardized, built and operated by many.',
