@@ -2,7 +2,7 @@ FROM node:18-alpine
 
 # Set working directory
 WORKDIR /app
-RUN ls- la
+RUN ls  -la
 # Copy package.json and package-lock.json
 COPY package*.json ./
 RUN ls -la
