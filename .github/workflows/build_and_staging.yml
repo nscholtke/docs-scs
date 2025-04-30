@@ -32,6 +32,8 @@ jobs:
         env:
           BASEURL: "/docs-scs"
         run: |
+          echo $PWD
+          ls -la
           npm ci
           npm run build
 
