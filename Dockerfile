@@ -5,6 +5,7 @@ WORKDIR /app
 RUN ls  -la
 # Copy package.json and package-lock.json
 COPY package*.json ./
+COPY * ./
 RUN ls -la
 # Install dependencies
 RUN npm ci
