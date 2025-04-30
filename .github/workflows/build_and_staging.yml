@@ -15,27 +15,61 @@ jobs:
         with:
           ref: ${{ github.ref_name }}
 
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
-      - name: Cache dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+      #- name: Setup Node
+      #  uses: actions/setup-node@v3
+      #  with:
+      #    node-version: 18
 
-      - name: Install dependencies and build page
-        env:
-          BASEURL: "/docs-scs"
+      #- name: Cache dependencies
+      #  uses: actions/cache@v3
+      #  with:
+      #    path: ~/.npm
+      #    key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+      #    restore-keys: |
+      #      ${{ runner.os }}-node-
+      
+      - name: Build Application in Docker
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: false
+          load: true
+          tags: docs-builder:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            BASEURL=/docs-scs
+
+      - name: Extract Built Files from Docker
         run: |
-          echo $PWD
-          ls -la
-          npm ci
-          npm run build
+          # Create a container from the image but don't run it
+          docker create --name temp-container docs-builder:latest
+          
+          # Create the build directory
+          mkdir -p build
+          
+          # Copy the build files from the container
+          # Adjust the source path based on where your Dockerfile places the built files
+          docker cp temp-container:/app/build/. ./build
+          
+          # Clean up the container
+          docker rm temp-container
+          
+          # Verify the files
+          echo "Contents of build directory:"
+          ls -la build
+
+      #- name: Install dependencies and build page
+      #  env:
+      #    BASEURL: "/docs-scs"
+      #  run: |
+      #    echo $PWD
+      #    ls -la
+      #    npm ci
+      #    npm run build
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
