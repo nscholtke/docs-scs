@@ -1,5 +1,7 @@
 FROM node:18-alpine
 
+RUN apk update && apk add --no-cache git openssh
+
 # Set working directory
 WORKDIR /app
 RUN ls  -la
